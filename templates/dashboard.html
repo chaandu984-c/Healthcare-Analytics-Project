@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        .dashboard-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .dashboard-title {
+            color: #173b68;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            border: 1px solid #e1e7ef;
+            border-top: 4px solid #3679c9;
+        }
+
+        .card h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0 0 12px;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #173b68;
+        }
+
+        .low {
+            border-top-color: #22a06b;
+        }
+
+        .medium {
+            border-top-color: #e9a23b;
+        }
+
+        .high {
+            border-top-color: #dc5656;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e1e7ef;
+        }
+
+        .chart-card h3 {
+            color: #173b68;
+            margin-top: 0;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        #chartMessage {
+            color: #b45309;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 750px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 400px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Healthcare Analytics</h1>
+        <p>Patient Risk Indicator System</p>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/register">Register Patient</a>
+        <a href="/patients">View Patients</a>
+        <a href="/dashboard">Dashboard</a>
+    </nav>
+
+    <main class="dashboard-container">
+
+        <h2 class="dashboard-title">Dashboard Overview</h2>
+
+        <p class="subtitle">
+            Summary of registered patient records and risk categories.
+        </p>
+
+        <section class="cards">
+
+            <div class="card">
+                <h3>Total Patients</h3>
+                <div class="number">{{ stats['total'] }}</div>
+            </div>
+
+            <div class="card low">
+                <h3>Low Risk</h3>
+                <div class="number">{{ stats['low'] }}</div>
+            </div>
+
+            <div class="card medium">
+                <h3>Medium Risk</h3>
+                <div class="number">{{ stats['medium'] }}</div>
+            </div>
+
+            <div class="card high">
+                <h3>High Risk</h3>
+                <div class="number">{{ stats['high'] }}</div>
+            </div>
+
+        </section>
+
+        <section class="chart-card">
+
+            <h3>Patient Risk Analysis</h3>
+
+            <p>Number of patients in each risk category.</p>
+
+            <div class="chart-container">
+                <canvas
+                    id="riskChart"
+                    data-low="{{ stats['low'] }}"
+                    data-medium="{{ stats['medium'] }}"
+                    data-high="{{ stats['high'] }}">
+                </canvas>
+            </div>
+
+            <p id="chartMessage"></p>
+
+        </section>
+
+        <p class="note">
+            Note: Risk categories are generated using simplified
+            demonstration rules. They are not medical diagnoses.
+        </p>
+
+    </main>
+
+    <script>
+        const canvas = document.getElementById("riskChart");
+        const message = document.getElementById("chartMessage");
+
+        const low = Number(canvas.dataset.low);
+        const medium = Number(canvas.dataset.medium);
+        const high = Number(canvas.dataset.high);
+
+        if (typeof Chart === "undefined") {
+
+            message.textContent =
+                "Chart library could not load. Check your internet connection.";
+
+        } else {
+
+            new Chart(canvas, {
+                type: "bar",
+
+                data: {
+                    labels: ["Low Risk", "Medium Risk", "High Risk"],
+
+                    datasets: [{
+                        label: "Number of Patients",
+                        data: [low, medium, high],
+
+                        backgroundColor: [
+                            "#22a06b",
+                            "#e9a23b",
+                            "#dc5656"
+                        ],
+
+                        borderRadius: 5,
+                        maxBarThickness: 90
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
+    </script>
+
+</body>
+</html>
