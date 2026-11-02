@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Patient</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .form-container {
+            max-width: 650px;
+            margin: 35px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .form-container h2 {
+            color: #173b68;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccd5e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #245a94;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #173b68;
+        }
+
+        .message {
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #e8f3ff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Healthcare Analytics</h1>
+        <p>Patient Risk Indicator System</p>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/register">Register Patient</a>
+        <a href="/patients">View Patients</a>
+        <a href="/dashboard">Dashboard</a>
+    </nav>
+
+    <div class="form-container">
+        <h2>Register New Patient</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/register">
+
+            <div class="form-group">
+                <label>Patient ID</label>
+                <input type="text" name="patient_id" required>
+            </div>
+
+            <div class="form-group">
+                <label>Patient Name</label>
+                <input type="text" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" name="age" min="1" max="120" required>
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Contact Number</label>
+                <input type="text" name="contact" required>
+            </div>
+
+            <div class="form-group">
+                <label>Blood Pressure (mmHg)</label>
+                <input type="number" name="blood_pressure" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Glucose Level</label>
+                <input type="number" name="glucose" min="0.01" step="any" required>
+            </div>
+
+            <button type="submit">Save Patient</button>
+
+        </form>
+    </div>
+
+</body>
+</html>
