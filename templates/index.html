@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Healthcare Analytics</h1>
+        <p>Patient Risk Indicator System</p>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/register">Register Patient</a>
+        <a href="/patients">View Patients</a>
+        <a href="/dashboard">Dashboard</a>
+    </nav>
+
+    <main class="home-container">
+        <h2>Welcome to Healthcare Analytics System</h2>
+
+        <p>
+            This system helps manage patient information,
+            calculate demonstration risk categories and
+            display patient statistics.
+        </p>
+
+        <div class="home-buttons">
+            <a href="/register" class="btn">Register New Patient</a>
+            <a href="/patients" class="btn">View Patients</a>
+            <a href="/dashboard" class="btn">View Dashboard</a>
+        </div>
+    </main>
+
+</body>
+</html>
